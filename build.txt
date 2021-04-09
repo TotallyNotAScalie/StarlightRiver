@@ -1,0 +1,3 @@
+displayName = Starlight River
+author = we need a funny name for the dev team
+version = 0.01
