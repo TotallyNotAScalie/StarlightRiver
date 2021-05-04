@@ -264,7 +264,7 @@ namespace StarlightRiver.Content.Bosses.SquidBoss
             var shinePos = npc.Center - backdrop.Size() / 2 + new Vector2(0, 920 - npc.ai[0]) - Main.screenPosition;
             DrawShine(new Rectangle((int)shinePos.X, (int)shinePos.Y, backdrop.Width, 240));
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, default, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, default, default, default, Main.GameViewMatrix.ZoomMatrix);
 
             Texture2D glass = GetTexture(AssetDirectory.SquidBoss + "WindowIn");
             Texture2D glass2 = GetTexture(AssetDirectory.SquidBoss + "WindowInGlow");
@@ -283,7 +283,7 @@ namespace StarlightRiver.Content.Bosses.SquidBoss
             }
 
             spriteBatch.End();
-            spriteBatch.Begin(default, default, default, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(default, default, SamplerState.PointClamp, default, default, default, Main.GameViewMatrix.ZoomMatrix);
 
             DrawWindow(spriteBatch, new Vector2(0, -70), new Color(200, 255, 255));
 
@@ -303,7 +303,7 @@ namespace StarlightRiver.Content.Bosses.SquidBoss
             DrawWindowLit(new Vector2(20, -65));
             DrawWindowLit(new Vector2(11, -105));
 
-            spriteBatch.Begin(default, default, default, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(default, default, SamplerState.PointClamp, default, default, default, Main.GameViewMatrix.ZoomMatrix);
 
             Texture2D texIn = GetTexture(AssetDirectory.SquidBoss + "SmallWindowIn");
 
