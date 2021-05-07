@@ -44,7 +44,7 @@ namespace StarlightRiver.Content.Items
 
 		public override void UpdateEquip(Player player)
 		{
-            player.GetModPlayer<ShieldPlayer>().MaxShield += 280;
+            player.GetModPlayer<DoTResistancePlayer>().DoTResist += 0.1f;
 		}
 
 		public override void UpdateInventory(Player player)
