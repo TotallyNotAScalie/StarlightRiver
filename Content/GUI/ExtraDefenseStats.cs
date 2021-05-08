@@ -68,7 +68,7 @@ namespace StarlightRiver.Content.GUI
 
 				var ResistPlayer = player.GetModPlayer<DoTResistancePlayer>();
 
-				int resistPercent = (int)(ResistPlayer.DoTResist * 100);
+				int resistPercent = (int)Math.Round(ResistPlayer.DoTResist * 100, MidpointRounding.AwayFromZero);
 				DoTResistPanel.value = $"{resistPercent}%";
 				Main.hoverItemName += $"\n{resistPercent}% DoT Resistance";
 			}
