@@ -8,6 +8,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using StarlightRiver.Content.Buffs;
 using StarlightRiver.Core;
+using Microsoft.Xna.Framework;
 
 namespace StarlightRiver.Content.Items.Potions
 {
@@ -38,15 +39,21 @@ namespace StarlightRiver.Content.Items.Potions
 			item.height = 32;
 			item.consumable = true;
 			item.maxStack = 30;
+			item.useStyle = ItemUseStyleID.EatingUsing;
+			item.useTime = 15;
 		}
 
 		public override bool CanUseItem(Player player) => !player.HasBuff(ModContent.BuffType<NoShieldPot>()) && !player.HasBuff(BuffID.PotionSickness);
 
 		public override bool UseItem(Player player)
 		{
+			player.GetModPlayer<ShieldPlayer>().Shield += amount;
 			player.AddBuff(ModContent.BuffType<ShieldDegenReduction>(), duration);
 			player.AddBuff(ModContent.BuffType<NoShieldPot>(), 3600);
 			player.AddBuff(BuffID.PotionSickness, 1200);
+
+			CombatText.NewText(player.Hitbox, new Color(150, 255, 255), amount);
+
 			return true;
 		}
 	}
@@ -73,7 +80,7 @@ namespace StarlightRiver.Content.Items.Potions
 		public override bool Autoload(ref string name, ref string texture)
 		{
 			texture = AssetDirectory.PotionsItem + name;
-			return base.Autoload(ref name, ref texture);
+			return true;
 		}
 	}
 
@@ -84,7 +91,7 @@ namespace StarlightRiver.Content.Items.Potions
 		public override bool Autoload(ref string name, ref string texture)
 		{
 			texture = AssetDirectory.PotionsItem + name;
-			return base.Autoload(ref name, ref texture);
+			return true;
 		}
 
 		public override void Update(Player player, ref int buffIndex)
