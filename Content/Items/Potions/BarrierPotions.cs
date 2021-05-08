@@ -42,6 +42,7 @@ namespace StarlightRiver.Content.Items.Potions
 			item.UseSound = Terraria.ID.SoundID.Item3;
 			item.useStyle = ItemUseStyleID.EatingUsing;
 			item.useTime = 15;
+			item.useAnimation = 15;
 		}
 
 		public override bool CanUseItem(Player player) => !player.HasBuff(ModContent.BuffType<NoShieldPot>()) && !player.HasBuff(BuffID.PotionSickness);
