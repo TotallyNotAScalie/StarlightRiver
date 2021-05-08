@@ -39,6 +39,7 @@ namespace StarlightRiver.Content.Items.Potions
 			item.height = 32;
 			item.consumable = true;
 			item.maxStack = 30;
+			item.UseSound = Terraria.ID.SoundID.Item3;
 			item.useStyle = ItemUseStyleID.EatingUsing;
 			item.useTime = 15;
 		}
