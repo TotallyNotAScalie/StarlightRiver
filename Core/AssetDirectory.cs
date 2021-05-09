@@ -70,6 +70,7 @@ namespace StarlightRiver.Core
         public const string MiscItem =              Assets + "Items/Misc/";
         public const string BreacherItem =          Assets + "Items/Breacher/";
         public const string PotionsItem =           Assets + "Items/Potions/";
+        public const string ForestItem =            Assets + "Items/Forest/";
 
         public const string CraftingTile =          Assets + "Tiles/Crafting/";
 
