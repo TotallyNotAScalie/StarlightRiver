@@ -37,10 +37,14 @@ namespace StarlightRiver.Content.Items.Forest
 
 		private Point16 FindNextTile(Player player)
 		{
+			if (Math.Abs(Player.tileTargetX - (player.Center.X / 16)) > Player.tileRangeX ||
+				Math.Abs(Player.tileTargetY - (player.Center.Y / 16)) > Player.tileRangeY)
+				return default;
+
 			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
 			int direction = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) ? -1 : 1;
 
-			for (int k = 0; k < maxRange; k++)
+			for (int k = 0; k < maxRange + Player.tileRangeX - 6; k++)
 			{
 				int nextX = Player.tileTargetX;
 				int nextY = Player.tileTargetY;
