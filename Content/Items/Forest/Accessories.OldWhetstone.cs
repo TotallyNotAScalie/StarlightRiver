@@ -13,11 +13,11 @@ using Terraria.ModLoader;
 
 namespace StarlightRiver.Content.Items.Forest
 {
-    class OldGrindstone : SmartAccessory
+    class OldWhetstone : SmartAccessory
     {
         public override string Texture => AssetDirectory.ForestItem + Name;
 
-        public OldGrindstone() : base("Old Grindstone", "+1 to all damage\n'why in tarnation are you sharpening your wand?!'") { }
+        public OldWhetstone() : base("Old Whetstone", "+1 to all damage\n'why in tarnation are you sharpening your wand?!'") { }
 
         public override void SafeSetDefaults() => item.rare = ItemRarityID.Blue;
 
