@@ -43,28 +43,34 @@ namespace StarlightRiver.Content.Items.Misc
 
         public override void Update(Player player, ref int buffIndex)
         {
-            StarlightPlayer mp = Main.LocalPlayer.GetModPlayer<StarlightPlayer>();
+            StarlightPlayer mp = player.GetModPlayer<StarlightPlayer>();
 
-            int level = mp.ironheartHighestLevel - mp.ironheartLevel;
-            mp.ironheartTimer += level + 1;
+            float level;
 
-            if(mp.ironheartTimer >= 60)
+            if (mp.ironheartTimer < 1)
             {
-                mp.ironheartTimer -= 60;
-                mp.ironheartLevel--;//doesn't need a cap because buff removes itself when time is below zero
-
-                if (mp.ironheartLevel <= 0)
-                    mp.ResetIronHeart();
+                mp.ironheartTimer += 0.01f;
+                level = mp.ironheartLevel;
+                player.GetModPlayer<ShieldPlayer>().DontDrainOvershield = true;
+            }
+            else
+            {
+                mp.ironheartTimer *= 1.02f;
+                level = (mp.ironheartLevel + 1) - mp.ironheartTimer;
+                player.GetModPlayer<ShieldPlayer>().OvershieldDrainRate = (int)(2.2f * mp.ironheartTimer);
             }
 
-            player.statDefense += mp.ironheartLevel;
+            //Main.NewText(level + " | " + mp.ironheartTimer);
+            Main.NewText(level);
+            if (level < 0.001f)
+            {
+                player.ClearBuff(Type);
+                mp.ResetIronHeart();
+            }
 
-            float val = (float)level / StarlightPlayer.IronheartMaxLevel;
+            player.statDefense += (int)level;
 
-            player.GetModPlayer<ShieldPlayer>().OvershieldDrainRate = (int)MathHelper.Lerp(0, 60, val);
-            Main.NewText((int)MathHelper.Lerp(0, 10, val));
-
-            player.buffTime[buffIndex] = mp.ironheartLevel * 60;//visual time value
+            player.buffTime[buffIndex] = (int)level * 60;//visual time value
         }
     }
 }
@@ -74,11 +80,10 @@ namespace StarlightRiver.Core
     public partial class StarlightPlayer : ModPlayer
     {
         public const int IronheartMaxLevel = 15;
-        public const int IronheartMaxDamage = 75;
+        public const int IronheartMaxDamage = 75; 
 
-        public int ironheartHighestLevel = 0;
         public int ironheartLevel = 0;
-        public int ironheartTimer = 0;
+        public float ironheartTimer = 0;
 
         public void SetIronHeart(int damage)
         {
@@ -87,25 +92,14 @@ namespace StarlightRiver.Core
             if (!player.HasBuff(buffType))
                 ResetIronHeart();
 
-                //Main.NewText("IronSet " + (Math.Min(damage, IronheartMaxDamage) / 15));
             int level = Math.Min(damage, IronheartMaxDamage) / 15;
-            ironheartLevel += level;//increases level
-            ironheartLevel = ironheartLevel > IronheartMaxLevel ? IronheartMaxLevel : ironheartLevel;//caps value
 
-
-            Main.NewText("IronLevel " + ironheartLevel);
-            Main.NewText("IronMax " + ironheartHighestLevel);
-            if (ironheartLevel > 0)
+            if (level > 0 && ironheartLevel < IronheartMaxLevel)//if level was increased
             {
-                if (ironheartLevel > ironheartHighestLevel)//if level was increased
-                {
-                    Main.NewText((ironheartLevel - ironheartHighestLevel));
-                    player.GetModPlayer<ShieldPlayer>().Shield += (ironheartLevel - ironheartHighestLevel) * 2;
-                    ironheartHighestLevel = ironheartLevel;//increases
-                }
-                else if(ironheartLevel < IronheartMaxLevel)
-                    player.GetModPlayer<ShieldPlayer>().Shield += 1;
+                player.GetModPlayer<ShieldPlayer>().Shield += ((ironheartLevel += level) > IronheartMaxLevel ? 
+                    level - (ironheartLevel - IronheartMaxLevel) : level) * 2;
 
+                ironheartLevel = ironheartLevel > IronheartMaxLevel ? IronheartMaxLevel : ironheartLevel;//caps value
                 player.AddBuff(buffType, 1);
             }
         }
@@ -113,7 +107,7 @@ namespace StarlightRiver.Core
         public void ResetIronHeart()
         {
             ironheartLevel = 0;
-            ironheartHighestLevel = 0;
+            ironheartTimer = 0;
         }
     }
 }
