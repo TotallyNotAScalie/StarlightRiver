@@ -83,7 +83,9 @@ namespace StarlightRiver.Content.Items.Forest
 
 			for (int k = 0; k < player.inventory.Length; k++)  //find the item to place the tile
 			{
-				if (player.inventory[k]?.createTile == tile.type)
+				var thisItem = player.inventory[k];
+
+				if (!thisItem.IsAir && thisItem.createTile == tile.type)
 					item = player.inventory[k];
 			}
 
@@ -124,7 +126,7 @@ namespace StarlightRiver.Content.Items.Forest
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Automatic Cumlayers Trowel");
-			Tooltip.SetDefault("Extends blocks in a straight line\nDirection is based on your position\n40 block range");
+			Tooltip.SetDefault("Extends blocks in a straight line\nDirection is based on your position\nHold SHIFT for reverse direction\n40 block range");
 		}
 
 		public override void SetDefaults()
