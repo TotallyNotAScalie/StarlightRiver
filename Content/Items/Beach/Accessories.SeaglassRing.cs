@@ -42,7 +42,7 @@ namespace StarlightRiver.Content.Items.Beach
 		public override void NearbyEffects(int i, int j, bool closer)
 		{
 			if (Main.rand.Next(20) == 0)
-				Dust.NewDust(new Vector2(i, j) * 16, 16, 16, DustID.MagicMirror, 0, 0, 0, default, 0.5f);
+				Dust.NewDust(new Vector2(i, j) * 16, 16, 16, 15, 0, 0, 0, default, 0.5f);
 		}
 
 		public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
