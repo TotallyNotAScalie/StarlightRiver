@@ -20,26 +20,29 @@ namespace StarlightRiver.Core
         {
             progress.Message = "Placing treasures";
             //Seaglass ring
-            PlaceSeaglassRing(0, 300);
-            PlaceSeaglassRing(Main.maxTilesX - 300, Main.maxTilesY);
+            PlaceSeaglassRing(0, 500);
+            PlaceSeaglassRing(Main.maxTilesX - 500, Main.maxTilesX);
         }
 
         private bool PlaceSeaglassRing(int xStart, int xEnd)
 		{
             for (int x = xStart; x < xEnd; x++)
-                for (int y = 200; y < Main.maxTilesY; y++)
+                for (int y = 100; y < Main.maxTilesY; y++)
                 {
                     var tile = Framing.GetTileSafely(x, y);
 
                     if (tile.active() && tile.type != TileID.Sand || tile.liquid > 0)
                         break;
-                    else if (tile.active() && tile.type == TileID.Sand && WorldGen.genRand.Next(40) == 0)
+                    else if (tile.active() && tile.type == TileID.Sand && Helper.AirScanUp(new Microsoft.Xna.Framework.Vector2(x, y - 1), 10) && WorldGen.genRand.Next(40) == 0)
                     {
-                        WorldGen.PlaceTile(x, y - 1, TileType<SeaglassRingTile>());
+                        var newTile = Framing.GetTileSafely(x, y - 1);
+                        newTile.ClearEverything();
+                        newTile.active(true);
+                        newTile.type = (ushort)TileType<SeaglassRingTile>();
+
                         return true;
                     }
                 }
-
             return false;
         }
     }
