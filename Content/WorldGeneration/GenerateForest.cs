@@ -59,7 +59,7 @@ namespace StarlightRiver.Core
                                 break;
                             }
                         }
-                        k += 15;
+                        k += 11;
                     }
                 }
 
@@ -120,12 +120,14 @@ namespace StarlightRiver.Core
 
         private void PalestoneChunk(int k, int y)
         {
-            int width = WorldGen.genRand.Next(4, 14);
-            y += WorldGen.genRand.Next(0, 3); //Adjusts how deep in the ground it is
+            int width = WorldGen.genRand.Next(4, 18);
+            y += WorldGen.genRand.Next(2, 6); //Adjusts how deep in the ground it is
+
             for (int x = k - (width / 2); x < k + (width / 2); x++) //Modified code from probably Scalie; I adjusted the pre-existing code.
             {
                 int xRel = x - k;
                 int xSqr = (-1 * xRel * xRel) / 8 + xRel + 1;
+
                 for (int y2 = y - xSqr; y2 < y + xSqr; y2++)
                 {
                     WorldGen.KillTile(x, y2);
