@@ -34,6 +34,12 @@ namespace StarlightRiver.Content.Items.Beach
 
 	class SeaglassRingTile : ModTile
 	{
+		public override bool Autoload(ref string name, ref string texture)
+		{
+			texture = AssetDirectory.Assets + "Items/Beach/" + Name;
+			return base.Autoload(ref name, ref texture);
+		}
+
 		public override void SetDefaults()
 		{
 			QuickBlock.QuickSetFurniture(this, 1, 1, DustID.Iron, SoundID.Coins, true, new Color(150, 250, 250));
