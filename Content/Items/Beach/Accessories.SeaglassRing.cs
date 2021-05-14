@@ -36,7 +36,7 @@ namespace StarlightRiver.Content.Items.Beach
 	{
 		public override bool Autoload(ref string name, ref string texture)
 		{
-			texture = AssetDirectory.Assets + "Items/Beach/" + Name;
+			texture = AssetDirectory.Assets + "Items/Beach/" + name;
 			return base.Autoload(ref name, ref texture);
 		}
 
