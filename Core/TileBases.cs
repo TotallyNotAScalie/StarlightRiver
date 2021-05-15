@@ -12,19 +12,20 @@ using static Terraria.ModLoader.ModContent;
 using Terraria.DataStructures;
 using StarlightRiver.Content.Tiles.JungleCorrupt;
 using Terraria.Enums;
+using StarlightRiver.Content.Tiles.Vitric;
 
 namespace StarlightRiver.Core
 {
     public abstract class ModFountain : ModTile
     {
-        private readonly string ItemName;
-        private int ItemType;
-        private readonly int FrameCount;
-        private readonly Color? MapColor;
-        private readonly int DustType;
-        private readonly int Width;
-        private readonly int Height;
-        private readonly string TexturePath;
+        protected readonly string ItemName;
+        protected int ItemType;
+        protected readonly int FrameCount;
+        protected readonly Color? MapColor;
+        protected readonly int DustType;
+        protected readonly int Width;
+        protected readonly int Height;
+        protected readonly string TexturePath;
 
         protected ModFountain(string drop, string path = null, int animFrameCount = 6, int dust = 1, Color? mapColor = null, int width = 2, int height = 4)
         {
@@ -150,15 +151,146 @@ namespace StarlightRiver.Core
         public virtual void FountainActive(int i, int j, bool closer) { }
     }
 
+    public abstract class WalkableCrystal : ModTile
+    {
+        protected readonly string ItemName;
+        protected int ItemType;
+        protected readonly string StructurePath;
+        protected string FullStructPath;
+        protected readonly int VariantCount;
+        protected readonly Color? MapColor;
+        protected readonly int DustType;
+        protected readonly int Sound;
+        protected readonly int MaxWidth;
+        protected readonly int MaxHeight;
+        protected readonly string TexturePath;
+
+        protected WalkableCrystal(int maxWidth, int maxHeight, string path = null, string structurePath = null, int variantCount = 1, string drop = null, int dust = 0, Color? mapColor = null, int sound = 1)
+        {
+            ItemName = drop;
+            TexturePath = path;
+            StructurePath = structurePath;
+            VariantCount = variantCount;
+            MapColor = mapColor;
+            DustType = dust;
+            MaxHeight = maxHeight;
+            MaxWidth = maxWidth;
+            Sound = sound;
+        }
+
+        public override bool Autoload(ref string name, ref string texture)
+        {
+            if (!string.IsNullOrEmpty(TexturePath))
+                texture = TexturePath + name;
+
+            string suffix = name + (VariantCount > 1 ? "_" : string.Empty);
+            FullStructPath = (string.IsNullOrEmpty(StructurePath) ? AssetDirectory.StructureFolder : StructurePath) + suffix;
+            return base.Autoload(ref name, ref texture);
+        }
+
+        public override void SetDefaults()
+        {
+            (this).QuickSet(int.MaxValue, DustType, Sound, MapColor ?? Color.Transparent, -1);
+            Main.tileBlockLight[Type] = false;
+            Main.tileFrameImportant[Type] = true;
+            TileID.Sets.DrawsWalls[Type] = true;
+
+            TileObjectData.newTile.UsesCustomCanPlace = true;
+            TileObjectData.newTile.HookPlaceOverride = new PlacementHook(PostPlace, -1, 0, true);
+            TileObjectData.addTile(Type);
+
+            Main.tileMerge[TileType<VitricSpike>()][Type] = true;
+            //Main.tileMerge[Type][TileType<VitricSpike>()] = true;
+            if(!string.IsNullOrEmpty(ItemName))
+                ItemType = mod.ItemType(ItemName);
+        }
+
+        private int PostPlace(int x, int y, int type, int style, int dir)
+        {
+            if (style < VariantCount)
+            {
+                if (VariantCount > 1)//if statement because the teniary was acting weird
+                    StructureHelper.StructureHelper.GenerateStructure(FullStructPath + style, new Point16(x, y), StarlightRiver.Instance);
+                else
+                    StructureHelper.StructureHelper.GenerateStructure(FullStructPath, new Point16(x, y), StarlightRiver.Instance);
+            }
+            return 0;
+        }
+
+        public override bool Drop(int i, int j)
+        {
+            if(Main.tile[i, j].frameX > 0)
+                Item.NewItem(i * 16, j * 16, 16 * MaxWidth, 16 * MaxHeight, ItemType);
+            return false;
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) => false;
+
+        public virtual Vector2 DrawOffset => new Vector2(9, 18);
+        public virtual Color DrawColor => Color.White;
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            Tile t = Main.tile[i, j];
+            if (t.frameX > 0)
+            {
+                if (PrePostDraw(i, j, spriteBatch))
+                {
+                    Texture2D tex = Main.tileTexture[Type];
+                    Rectangle frame = tex.Frame(VariantCount, 1, t.frameX - 1);
+                    spriteBatch.Draw(tex, ((new Vector2(i, j) + Helper.TileAdj) * 16 - Main.screenPosition) + DrawOffset, frame, DrawColor, 0, new Vector2(frame.Width * 0.5f, frame.Height), 1, 0, 0);
+                    //Helper.DrawWithLighting(((new Vector2(i, j) + Helper.TileAdj) * 16) - Main.screenPosition, tex); //Subject to change
+                }
+                AfterPostDraw(i, j, spriteBatch);
+            }
+        }
+        public virtual bool PrePostDraw(int i, int j, SpriteBatch spriteBatch) => true;
+        public virtual void AfterPostDraw(int i, int j, SpriteBatch spriteBatch) { }
+
+        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => fail = true;
+        public override bool CanExplode(int i, int j) => false;
+        public override bool Slope(int i, int j) => false;
+    }
+
+    public abstract class VitricCrystal : WalkableCrystal
+    {
+        protected VitricCrystal(int maxWidth, int maxHeight, string path = null, int variantCount = 1, string drop = null) :
+            base(maxWidth, maxHeight, path, AssetDirectory.VitricCrystalStructs, variantCount, drop, DustType<Content.Dusts.Air>(), new Color(115, 182, 158), SoundID.CoinPickup){ }
+
+        public override void AfterPostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            Texture2D lavaFadeTex = GetTexture(AssetDirectory.VitricTile + "VitricLavaFade");
+            int halfWidth = (MaxWidth / 2);//to account for odd numbers
+            for (int k = -halfWidth ; k < halfWidth + 1; k++)
+                for (int h = MaxHeight - 1; h < 1; h++)
+                {
+                    if (Main.tile[i + k, j + h].type == Type)
+                    {
+                        int val = (int)(Math.Sin(Main.GameUpdateCount * 0.05f + (h + k)) * 20f + 235f);
+                        Color col = new Color(val, val, val, 0);
+                        //Main.NewText(val / 255f);
+                        Tile sideTile = Main.tile[i + k - 1, j + h];
+                        Tile sideUpTile = Main.tile[i + k - 1, j + h - 1];
+                        if ((sideUpTile.liquidType() == Tile.Liquid_Lava && sideTile.type != Type) || (sideTile.liquidType() == Tile.Liquid_Lava && sideTile.liquid > 200))
+                            spriteBatch.Draw(lavaFadeTex, ((new Vector2(i + k, j + h) + Helper.TileAdj) * 16 - Main.screenPosition), null, col, 0, default, new Vector2(val / 255f, 1), SpriteEffects.None, 0);
+                        sideTile = Main.tile[i + k + 1, j + h];
+                        sideUpTile = Main.tile[i + k + 1, j + h - 1];
+                        if ((sideUpTile.liquidType() == Tile.Liquid_Lava && sideTile.type != Type) || (sideTile.liquidType() == Tile.Liquid_Lava && sideTile.liquid > 200))
+                            spriteBatch.Draw(lavaFadeTex, ((new Vector2(i + k - 2, j + h) + Helper.TileAdj) * 16 - Main.screenPosition) + new Vector2(lavaFadeTex.Width, 0), null, col, 0, new Vector2(lavaFadeTex.Width, 0), new Vector2(val / 255f, 1), SpriteEffects.FlipHorizontally, 0);
+                    }
+                }
+        }
+    }
+
     public abstract class ModBanner : ModTile
     {
-        private readonly string ItemName;
-        private int ItemType;
-        private readonly int NpcType;
-        private readonly int Width;
-        private readonly int Height;
-        private readonly Color? MapColor;
-        private readonly string TexturePath;
+        protected readonly string ItemName;
+        protected int ItemType;
+        protected readonly int NpcType;
+        protected readonly int Width;
+        protected readonly int Height;
+        protected readonly Color? MapColor;
+        protected readonly string TexturePath;
+
         public ModBanner(string drop, int npcType, string path = null, int width = 1, int height = 3, Color? mapColor = null)
         {
             ItemName = drop;
@@ -224,16 +356,16 @@ namespace StarlightRiver.Core
 
     public abstract class ModVine : ModTile
     {
-        private readonly string[] AnchorableTiles;
-        private int[] AnchorTileTypes;
-        private readonly int DustType;
-        private readonly int MaxVineLength;
-        private readonly int GrowthChance;//lower is faster (one out of this amount)
-        private readonly Color? MapColor;
-        private readonly string ItemName;
-        private readonly int DustAmount;
-        private readonly int Sound;
-        private readonly string TexturePath;
+        protected readonly string[] AnchorableTiles;
+        protected int[] AnchorTileTypes;
+        protected readonly int DustType;
+        protected readonly int MaxVineLength;
+        protected readonly int GrowthChance;//lower is faster (one out of this amount)
+        protected readonly Color? MapColor;
+        protected readonly string ItemName;
+        protected readonly int DustAmount;
+        protected readonly int Sound;
+        protected readonly string TexturePath;
 
         public ModVine(string[] anchorableTiles, int dustType, Color? mapColor = null, int growthChance = 10, int maxVineLength = 9, string drop = null, int dustAmount = 1, int soundType = SoundID.Grass, string path = null)
         {
