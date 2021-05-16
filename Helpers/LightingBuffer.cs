@@ -127,14 +127,22 @@ namespace StarlightRiver.Helpers
             if (Main.dedServ || !Helper.OnScreen(new Rectangle(pos.X, pos.Y, tex.Width, tex.Height))) return;
             if (color == default) color = Color.White;
 
-            Matrix zoom = //Main.GameViewMatrix.ZoomMatrix;
-                new Matrix
-                (
-                    Main.GameViewMatrix.Zoom.X, 0, 0, 0,
-                    0, Main.GameViewMatrix.Zoom.X, 0, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 1
-                );
+            Matrix zoom =  //Main.GameViewMatrix.ZoomMatrix;
+            new Matrix
+            (
+                Main.GameViewMatrix.Zoom.X, 0, 0, 0,
+                0, Main.GameViewMatrix.Zoom.X, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            );
+
+            //new Matrix
+            //(
+            //    Main.GameViewMatrix.Zoom.X, 0, 0, 0,
+            //    0, Main.GameViewMatrix.Zoom.X, 0, 0,
+            //    0, 0, 1, 0,
+            //    0, 0, 0, 1
+            //);
 
             ApplyEffect.Parameters["screenSize"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
             ApplyEffect.Parameters["texSize"].SetValue(tex.Size());
