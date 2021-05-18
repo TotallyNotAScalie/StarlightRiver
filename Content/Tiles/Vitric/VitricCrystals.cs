@@ -107,7 +107,7 @@ namespace StarlightRiver.Content.Tiles.Vitric
 
     public class VitricGiantCrystal : VitricCrystal
     {
-        public VitricGiantCrystal() : base(10, 19, 2) { }//a
+        public VitricGiantCrystal() : base(10, 19, 4) { }//a
     }
 
     public class VitricLargeCrystal : VitricCrystal
