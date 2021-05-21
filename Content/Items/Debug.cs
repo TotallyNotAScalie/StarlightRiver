@@ -4,6 +4,7 @@ using StarlightRiver.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -39,7 +40,7 @@ namespace StarlightRiver.Content.Items
             item.useTurn = true;
             item.accessory = true;
 
-            item.createTile = ModContent.TileType<CrashPod>();
+            //item.createTile = ModContent.TileType<CrashPod>();
         }
 
 		public override void UpdateEquip(Player player)
@@ -49,13 +50,16 @@ namespace StarlightRiver.Content.Items
 
 		public override void UpdateInventory(Player player)
         {
-            float rot = Main.rand.NextFloat(6.28f);
-
-            //Dust.NewDustPerfect(player.Center + Microsoft.Xna.Framework.Vector2.UnitX.RotatedBy(rot) * 300, ModContent.DustType<Bosses.GlassBoss.LavaSpew>(), Microsoft.Xna.Framework.Vector2.UnitX.RotatedBy(rot));
+            Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+            Main.NewText(tile.bTileHeader3.ToString("D"));
         }
 
         public override bool UseItem(Player player)
         {
+            Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+
+            tile.bTileHeader3 |= 0b00100000;
+
             player.GetModPlayer<CodexHandler>().CodexState = 1;
 
             foreach (CodexEntry entry in player.GetModPlayer<CodexHandler>().Entries)
