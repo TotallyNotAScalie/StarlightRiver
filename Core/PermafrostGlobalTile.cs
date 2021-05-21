@@ -21,7 +21,13 @@ namespace StarlightRiver.Core
 		{
 			IL.Terraria.IO.WorldFile.SaveWorldTiles += SaveExtraBits;
 			IL.Terraria.IO.WorldFile.LoadWorldTiles += LoadExtraBits;
+			On.Terraria.Tile.isTheSameAs += CompareExtraBits;
 			return base.Autoload(ref name);
+		}
+
+		private bool CompareExtraBits(On.Terraria.Tile.orig_isTheSameAs orig, Tile self, Tile compTile)
+		{
+			return orig(self, compTile) && (self.bTileHeader3 & 0b11100000) == (compTile.bTileHeader3 & 0b11100000);
 		}
 
 		private void SaveExtraBits(ILContext il)
