@@ -50,8 +50,7 @@ namespace StarlightRiver.Content.Items
 
 		public override void UpdateInventory(Player player)
         {
-            Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
-            Main.NewText(tile.bTileHeader3.ToString("D"));
+
         }
 
         public override bool UseItem(Player player)
