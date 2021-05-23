@@ -13,7 +13,7 @@ float4 PixelShaderFunction(float4 screenSpace : TEXCOORD0) : COLOR0
     float2 st = screenSpace.xy;
     float2 off = float2(sin(time + st.y * 100.0 + offset.y * 100.0), sin(time + st.x * 100.0 + offset.x * 100.0)) / screenSize;
 
-    float map = tex2D(samplerTex2, st).r;
+    float map = tex2D(samplerTex2, st + off).r;
     float4 color = tex2D(samplerTex, st + off);
 
     float progress = (st.x + st.y) * 10.0;
@@ -23,7 +23,7 @@ float4 PixelShaderFunction(float4 screenSpace : TEXCOORD0) : COLOR0
     float b = 72.0;
 
     float3 colorB = float3(r, g, b);
-    float3 color2 = colorB * 0.02 * map * (color.r + color.b * 2.0);
+    float3 color2 = colorB * 0.015 * map * (color.r + color.b * 4.0);
 
     return float4(color2, color.a) ;
 }
