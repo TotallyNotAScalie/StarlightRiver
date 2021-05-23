@@ -160,8 +160,8 @@ namespace StarlightRiver.Content.Bosses.SquidBoss
             Vector2 pos2 = npc.Center + new Vector2(-840, 35 * 16) + new Vector2(0, -npc.ai[0]) - Main.screenPosition;
             var source2 = new Rectangle(0, tex.Height - (int)npc.ai[0] + 5 * 16, tex.Width, 2);
 
-            LightingBufferRenderer.DrawWithLighting(pos, tex, source, new Color(200, 230, 255) * 0.4f);
-            spriteBatch.Draw(tex, pos2, source2, Color.White * 0.6f, 0, Vector2.Zero, 1, 0, 0);
+            LightingBufferRenderer.DrawWithLighting(pos + source.TopLeft(), tex, source, new Color(200, 230, 255) * 0.4f);
+            LightingBufferRenderer.DrawWithLighting(pos2, tex, source2, Color.White * 0.8f);
         }
 
         private static readonly VertexPositionColorTexture[] verticies = new VertexPositionColorTexture[6];
