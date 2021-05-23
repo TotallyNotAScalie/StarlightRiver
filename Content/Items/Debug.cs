@@ -55,16 +55,24 @@ namespace StarlightRiver.Content.Items
 
         public override bool UseItem(Player player)
         {
-            Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
+            TurnTile(Player.tileTargetX, Player.tileTargetY);
+            return true;
+        }
+
+        private void TurnTile(int x, int y)
+		{
+            Tile tile = Framing.GetTileSafely(x, y);
 
             tile.bTileHeader3 |= 0b00100000;
 
-            player.GetModPlayer<CodexHandler>().CodexState = 1;
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
+                {
+                    Tile tile2 = Framing.GetTileSafely(i + x, j + y);
 
-            foreach (CodexEntry entry in player.GetModPlayer<CodexHandler>().Entries)
-                entry.Locked = true;
-
-            return true;
+                    if (tile2.collisionType == 0 && ((tile2.bTileHeader3 & 0b11100000) >> 5) == 0)
+                        TurnTile(i + x, j + y);
+                }
         }
     }
 }
