@@ -13,6 +13,13 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
+/*
+ * Fair warning to anyone reading this file, I'm fairly certain what you see here was only able to be made through demonic posession or similar supernatural events.
+ * Do not attempt to reverse engineer this yourself, for everyone's sake.
+ * If this is broken in the future, just cancel the mod. Its not worth it.
+ * Please.
+ */
+
 namespace StarlightRiver.Core
 {
 	class PermafrostGlobalTile : ModWorld
@@ -25,7 +32,7 @@ namespace StarlightRiver.Core
 			IL.Terraria.IO.WorldFile.SaveWorldTiles += SaveExtraBits;
 			IL.Terraria.IO.WorldFile.LoadWorldTiles += LoadExtraBits;
 			On.Terraria.Tile.isTheSameAs += CompareExtraBits;
-			On.Terraria.Main.SetDisplayMode += RefreshLightingTarget;
+			On.Terraria.Main.SetDisplayMode += RefreshWaterTargets;
 			Main.OnPreDraw += DrawAuroraTarget;
 
 			auroraBackTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight, false, default, default, default, RenderTargetUsage.PreserveContents);
@@ -34,7 +41,7 @@ namespace StarlightRiver.Core
 			return base.Autoload(ref name);		
 		}
 
-		private void RefreshLightingTarget(On.Terraria.Main.orig_SetDisplayMode orig, int width, int height, bool fullscreen)
+		private void RefreshWaterTargets(On.Terraria.Main.orig_SetDisplayMode orig, int width, int height, bool fullscreen)
 		{
 			if (width != Main.screenWidth || height != Main.screenHeight)
 			auroraBackTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, width, height, false, default, default, default, RenderTargetUsage.PreserveContents);
@@ -62,6 +69,8 @@ namespace StarlightRiver.Core
 							Texture2D tex = ModContent.GetTexture(AssetDirectory.Assets + "Misc/AuroraWater");
 							Main.spriteBatch.Draw(tex, target, findSource(i, j), Color.White * 0.5f);
 						}
+
+						tile = null;
 					}
 				}
 
