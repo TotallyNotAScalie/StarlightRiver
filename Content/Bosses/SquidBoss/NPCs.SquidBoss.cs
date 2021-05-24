@@ -214,7 +214,7 @@ namespace StarlightRiver.Content.Bosses.SquidBoss
                 Main.LocalPlayer.GetModPlayer<StarlightPlayer>().ScreenMovePan = npc.Center + new Vector2(0, -600);
                 Main.LocalPlayer.GetModPlayer<StarlightPlayer>().ScreenMoveTime = 600;
 
-                int i = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y - 1050, NPCType<ArenaBlocker>(), 0, 800);
+                int i = NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y - 1050 - 96, NPCType<ArenaBlocker>(), 0, 800);
                 arenaBlocker = Main.npc[i];
             }
 

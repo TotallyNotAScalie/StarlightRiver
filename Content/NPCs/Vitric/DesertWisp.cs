@@ -74,7 +74,7 @@ namespace StarlightRiver.Content.NPCs.Vitric
 		{
             return Color.Lerp(new Color(100, 200, 255), new Color(80, 120, 255), (float)Math.Sin(textureCoordinates.X * 6.28f + Main.GameUpdateCount / 100f)) * (float)Math.Pow(Math.Sin((1 - textureCoordinates.X) * 3.14f), 4);
 
-            return Color.Lerp(new Color(255, 70, 40), new Color(255, 160, 60), (float)Math.Sin(textureCoordinates.X * 6.28f + Main.GameUpdateCount / 100f)) * (float)Math.Pow(Math.Sin((1 - textureCoordinates.X) * 3.14f), 4);
+            //return Color.Lerp(new Color(255, 70, 40), new Color(255, 160, 60), (float)Math.Sin(textureCoordinates.X * 6.28f + Main.GameUpdateCount / 100f)) * (float)Math.Pow(Math.Sin((1 - textureCoordinates.X) * 3.14f), 4);
         }
 
 		private static float TrailWidth(float factorAlongTrail)
