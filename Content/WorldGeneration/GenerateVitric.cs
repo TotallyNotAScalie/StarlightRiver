@@ -14,6 +14,7 @@ using static Terraria.WorldGen;
 using StarlightRiver.Core;
 using StarlightRiver.Helpers;
 using Terraria.ID;
+using StarlightRiver.Content.CustomHooks;
 
 namespace StarlightRiver.Core
 {
@@ -47,6 +48,8 @@ namespace StarlightRiver.Core
             
             //Basic biome information
             VitricBiome = new Rectangle(UndergroundDesertLocation.X - 80, UndergroundDesertLocation.Y + UndergroundDesertLocation.Height, UndergroundDesertLocation.Width + 150, vitricHeight);
+            //Boss arena protection
+            ProtectionWorld.ProtectedRegions.Add(new Rectangle(VitricBiome.X + VitricBiome.Width / 2 - 59, VitricBiome.Y - 1, 108, 66));
 
             int minCeilingDepth = (int)((VitricBiome.Y + (VitricBiome.Height / 2)) - (17f * Math.Log(VitricSlopeOffset - 8))); //Various informational variables - not to be changed
             int maxCeilingDepth = minCeilingDepth + 7;

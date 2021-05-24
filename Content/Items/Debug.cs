@@ -1,4 +1,6 @@
-﻿using StarlightRiver.Codex;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StarlightRiver.Codex;
 using StarlightRiver.Content.Tiles.CrashTech;
 using StarlightRiver.Core;
 using System;
@@ -53,7 +55,13 @@ namespace StarlightRiver.Content.Items
 
         }
 
-        public override bool UseItem(Player player)
+		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+		{
+            var r = StarlightWorld.VitricBiome;
+            spriteBatch.Draw(Main.magicPixel, new Rectangle((r.X + r.Width / 2 - 59) * 16 - (int)Main.screenPosition.X, (r.Y + 7) * 16 - (int)Main.screenPosition.Y, (108) * 16, (66) * 16), Color.Red * 0.25f);
+		}
+
+		public override bool UseItem(Player player)
         {
             TurnTile(Player.tileTargetX, Player.tileTargetY);
             return true;
