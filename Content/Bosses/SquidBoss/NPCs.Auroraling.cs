@@ -25,7 +25,12 @@ namespace StarlightRiver.Content.Bosses.SquidBoss
             npc.knockBackResist = 3f;
         }
 
-        public override void AI()
+		public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
+		{
+            target.noKnockback = true;
+		}
+
+		public override void AI()
         {
             npc.ai[0]++;
             npc.frame = new Rectangle(26 * ((int)(npc.ai[0] / 5) % 3), 0, 26, 30);
