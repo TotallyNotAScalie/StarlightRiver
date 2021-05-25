@@ -188,7 +188,7 @@ namespace StarlightRiver.Core
             float[] heights = new float[VitricBiome.Width]; //2D heightmap to create terrain
 
             for (int x = 0; x < heights.Length; x++)
-                heights[x] = 0;// genNoise.GetNoise(x, 0);
+                heights[x] = genNoise.GetNoise(x, 0);
 
             float leftCurveConst = 13f;// 15f - ((0.3f + heights[0]) * VitricNoiseHeight); //For curving down into the noise properly, left side
             float rightCurveConst = 13f;// 15f - ((0.3f + heights[heights.Length - 1]) * VitricNoiseHeight); //Right side
