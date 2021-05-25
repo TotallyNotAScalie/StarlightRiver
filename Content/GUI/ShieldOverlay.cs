@@ -44,7 +44,7 @@ namespace StarlightRiver.Content.GUI
 
 				Vector2 vector = Main.fontMouseText.MeasureString(text);
 
-				var shieldText = $" + {sp.Shield}/{sp.MaxShield}";
+				var shieldText = $"  {sp.Shield}/{sp.MaxShield}";
 				float textWidth = Main.fontMouseText.MeasureString(shieldText).X / 2;
 				var pos2 = new Vector2(Main.screenWidth - 300 + 13 * num4 + vector.X * 0.5f - textWidth - 6, 6f);
 

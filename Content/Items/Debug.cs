@@ -63,7 +63,7 @@ namespace StarlightRiver.Content.Items
 
 		public override bool UseItem(Player player)
         {
-            TurnTile(Player.tileTargetX, Player.tileTargetY);
+            StarlightWorld.VitricGen(new Terraria.World.Generation.GenerationProgress());
             return true;
         }
 

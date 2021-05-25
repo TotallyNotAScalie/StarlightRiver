@@ -38,7 +38,7 @@ namespace StarlightRiver.Content.CustomHooks
 			if (sp.Shield <= 0 && sp.MaxShield <= 0)
 				return arg;
 
-			return arg - (int)(Main.fontMouseText.MeasureString($" Bar: {sp.Shield}/{sp.MaxShield}").X / 2) - 6;
+			return arg - (int)(Main.fontMouseText.MeasureString($"  {sp.Shield}/{sp.MaxShield}").X / 2) - 6;
 		}
 	}
 }
