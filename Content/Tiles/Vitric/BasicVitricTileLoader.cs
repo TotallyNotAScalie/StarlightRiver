@@ -119,6 +119,10 @@ namespace StarlightRiver.Content.Tiles.Vitric
 
             AddMerge("VitricSand", sands);
 
+			AddMerge("VitricSandPlain", TileType<VitricSpike>());
+			AddMerge("VitricSoftSand", TileType<VitricSpike>());
+			AddMerge("VitricSand", TileType<VitricSpike>());
+
             AddMerge("AncientSandstone", "AncientSandstoneTile");
 			AddMerge("AncientSandstone", "VitricSoftSand");
 			AddMerge("AncientSandstone", "VitricSandPlain");

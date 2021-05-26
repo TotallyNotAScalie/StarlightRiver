@@ -308,7 +308,7 @@ namespace StarlightRiver.Core
                         KillWall(x, y, false);
                     }
 
-                    var targetY = layers["FLOOR"] - 9 + (int)(Math.Sin((xDif - lakeStart) / 30f * 3.14f) * 8);
+                    var targetY = layers["FLOOR"] - 9 + (int)(Math.Sin((xDif - lakeStart) / (float)lakeWidth * 3.14f) * 8);
 
                     if (makingLake && y <= targetY )
                     {
