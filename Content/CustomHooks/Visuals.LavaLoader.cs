@@ -59,10 +59,18 @@ namespace StarlightRiver.Content.Lavas
             var c = new ILCursor(il);
             c.TryGotoNext(n => n.MatchLdsfld(typeof(Main), "liquidTexture"));
             c.Index += 3;
-            c.EmitDelegate<Func<Texture2D, Texture2D>>(LavaBlockBody);
+            c.Emit(OpCodes.Ldloc, 16);
+            c.Emit(OpCodes.Ldloc, 15);
+
+            c.Emit(OpCodes.Ldloc, 140);
+            c.Emit(OpCodes.Ldloc, 141);
+            c.Emit(OpCodes.Ldloc, 142);
+            c.Emit(OpCodes.Ldloc, 143);
+
+            c.EmitDelegate<Func<Texture2D, int, int, Tile, Tile, Tile, Tile, Texture2D>>(LavaBlockBody);
         }
 
-        private Texture2D LavaBlockBody(Texture2D arg)
+        private Texture2D LavaBlockBody(Texture2D arg, int x, int y, Tile up, Tile left, Tile right, Tile down)
         {
             foreach (var style in lavas)
                 if (style.ChooseLavaStyle())
@@ -70,6 +78,7 @@ namespace StarlightRiver.Content.Lavas
                     string path = "";
                     string garbage = "", garbage2 = "";
                     style.SafeAutoload(ref garbage, ref path, ref garbage2);
+                    style.DrawBlockEffects(x, y, up, left, right, down);
                     return GetTexture(path);
                 }
 

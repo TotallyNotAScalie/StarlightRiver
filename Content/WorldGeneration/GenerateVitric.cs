@@ -198,6 +198,7 @@ namespace StarlightRiver.Core
 
             bool makingLake = false;
             int lakeStart = 0;
+            int lakeWidth = 30;
 
             for (int x = VitricBiome.X; x < VitricBiome.X + VitricBiome.Width; x++) //Basic biome shape
             {
@@ -289,6 +290,7 @@ namespace StarlightRiver.Core
                 {
                     makingLake = true;
                     lakeStart = xDif;
+                    lakeWidth = genRand.Next(20, 35);
                 }
 
                 for (int y = layers["FLOOR"] - 9; y < layers["BOTTOM"] + 8; ++y)
@@ -324,8 +326,11 @@ namespace StarlightRiver.Core
 
                         if (y == targetY)
                         {
-                            PlaceTile(x, y, TileType<VitricSpike>(), false, true);
-                            t.active(true);
+                            for (int k = 0; k < genRand.Next(2, 3); k++)
+                            {
+                                PlaceTile(x, y + k, TileType<VitricSpike>(), false, true);
+                                t.active(true);
+                            }
                         }
                     }
                 }
@@ -334,7 +339,7 @@ namespace StarlightRiver.Core
                 {
                     var lakeProgress = xDif - lakeStart;
 
-                    if (lakeProgress > 30)
+                    if (lakeProgress > lakeWidth)
                         makingLake = false;
                 }
             }
