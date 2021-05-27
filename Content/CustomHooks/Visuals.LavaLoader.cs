@@ -62,9 +62,9 @@ namespace StarlightRiver.Content.Lavas
             c.Emit(OpCodes.Ldloc, 16);
             c.Emit(OpCodes.Ldloc, 15);
 
-            c.Emit(OpCodes.Ldloc, 140);
-            c.Emit(OpCodes.Ldloc, 141);
             c.Emit(OpCodes.Ldloc, 142);
+            c.Emit(OpCodes.Ldloc, 141);
+            c.Emit(OpCodes.Ldloc, 140);
             c.Emit(OpCodes.Ldloc, 143);
 
             c.EmitDelegate<Func<Texture2D, int, int, Tile, Tile, Tile, Tile, Texture2D>>(LavaBlockBody);
@@ -82,7 +82,7 @@ namespace StarlightRiver.Content.Lavas
                     string garbage = "", garbage2 = "";
                     style.SafeAutoload(ref garbage, ref path, ref garbage2);
                     style.DrawBlockEffects(x, y, up, left, right, down);
-                    return GetTexture(path);
+                    return GetTexture(path + "_Block");
                 }
 
             return arg;
