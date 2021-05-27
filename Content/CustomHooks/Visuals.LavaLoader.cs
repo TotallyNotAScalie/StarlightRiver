@@ -72,7 +72,7 @@ namespace StarlightRiver.Content.Lavas
 
         private Texture2D LavaBlockBody(Texture2D arg, int x, int y, Tile up, Tile left, Tile right, Tile down)
         {
-            if (Framing.GetTileSafely(x, y).liquidType() != 1)
+            if (arg != GetTexture("Terraria/Liquid_1"))
                 return arg;
 
             foreach (var style in lavas)
