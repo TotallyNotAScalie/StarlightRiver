@@ -169,8 +169,7 @@ namespace StarlightRiver.Core
             GenTemple();
 
             GenDesertDecoration();
-
-            //DebugSquares();
+            FinalCleanup();
 
             VitricBiome.Y -= 8; //Adjust a bit
         }
