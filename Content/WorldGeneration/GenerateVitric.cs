@@ -39,7 +39,7 @@ namespace StarlightRiver.Core
         /// <param name="progress"></param>
         public static void VitricGen(GenerationProgress progress)
         {
-            progress.Message = "Digging Vitric Desert";
+            progress.Message = "Digging the Vitric Desert";
 
             int vitricHeight = 140;
             ValidGround = new int[] { instance.TileType("VitricSand"), instance.TileType("VitricSoftSand") };
@@ -157,7 +157,7 @@ namespace StarlightRiver.Core
                 }
             } //Mini islands
 
-            progress.Message = "Populating the Vitric";
+            progress.Message = "Melting Glass";
 
             GenConsistentMiniIslands();
             GenSandstonePillars();
@@ -601,8 +601,11 @@ namespace StarlightRiver.Core
         /// <summary>Generates a large island at X/Y.</summary>
         private static void CreateIsland(int x, int y, bool small = false)
         {
-            int wid = genRand.Next(32, 42);
-            if (small) wid = genRand.Next(10, 18);
+            int width = genRand.Next(32, 42);
+
+            if (small)
+                width = genRand.Next(10, 18);
+
             int top = 5;
             int depth = 2;
 
@@ -611,22 +614,26 @@ namespace StarlightRiver.Core
             int peakStart = 0;
             int offset = 0;
 
-            for (int i = x - (int)(wid / 2f); i < x + (wid / 2f); ++i)
+            for (int i = x - (int)(width / 2f); i < x + (width / 2f); ++i)
             {
-                if (i == x - (int)(wid / 2f) + 1) top++;
-                else if (i == (x + (int)(wid / 2f)) - 1) top--;
+                if (i == x - (int)(width / 2f) + 1) 
+                    top++;
+                else if (i == (x + (int)(width / 2f)) - 1) 
+                    top--;
 
                 if (!peak)
                 {
-                    if (depth <= 2) depth += genRand.Next(2);
-                    else depth += genRand.Next(-1, 2);
+                    if (depth <= 2) 
+                        depth += genRand.Next(2);
+                    else
+                        depth += genRand.Next(-1, 2);
 
                     if (genRand.Next(3) == 0)
                     {
                         peak = true;
                         peakStart = i;
                         peakEnd = i + genRand.Next(3, 8);
-                        if (peakEnd > (x + (wid / 2f)) - 1) peakEnd = (int)(x + (wid / 2f)) - 1;
+                        if (peakEnd > (x + (width / 2f)) - 1) peakEnd = (int)(x + (width / 2f)) - 1;
                     }
                 }
                 else
@@ -635,28 +642,33 @@ namespace StarlightRiver.Core
                     int dif = peakEnd - peakStart;
                     int deep = (7 - dif);
 
-                    if (dist > (int)(dif / 2f)) depth += genRand.Next(deep, deep + 2);
-                    else depth -= genRand.Next(deep, deep + 2);
+                    if (dist > (int)(dif / 2f))
+                        depth += genRand.Next(deep, deep + 2);
+                    else 
+                        depth -= genRand.Next(deep, deep + 2);
 
                     if (x >= peakEnd) peak = false;
                 }
 
                 if (i % 4 == 0)
                 {
-                    if (i < x) top += genRand.Next(2);
-                    else top -= genRand.Next(2);
+                    if (i < x)
+                        top += genRand.Next(2);
+                    else 
+                        top -= genRand.Next(2);
                 }
 
-                if (i % 8 == 2) offset += genRand.Next(-1, 2);
+                if (i % 8 == 2)
+                    offset += genRand.Next(-1, 2);
 
                 if (top < 3) top = 3;
 
-                if (i > x + (wid / 2f) - 4 && depth > 4) depth--;
-                if (i > x + (wid / 2f) - 4 && depth > 8) depth--;
+                if (i > x + (width / 2f) - 4 && depth > 4) depth--;
+                if (i > x + (width / 2f) - 4 && depth > 8) depth--;
 
                 for (int j = y - top + offset; j < y + depth + offset; j++)
                 {
-                    int t = j > (y + depth + offset) - 4 ? instance.TileType("VitricSand") : instance.TileType("VitricSoftSand");
+                    int t = j > (y + depth + offset) - 4 ? TileID.Sandstone : instance.TileType("VitricSoftSand");
                     PlaceTile(i, j, t, false, true);
                 }
             }
@@ -667,7 +679,7 @@ namespace StarlightRiver.Core
                 int tries = 0;
                 while (true)
                 {
-                    int cX = x + genRand.Next((int)(wid * -0.60f), (int)(wid * 0.60f)) - 3;
+                    int cX = x + genRand.Next((int)(width * -0.60f), (int)(width * 0.60f)) - 3;
                     int cY = y - 5;
                     while (Main.tile[cX, cY].active())
                         cY--;
@@ -675,6 +687,7 @@ namespace StarlightRiver.Core
                         FindType(cX, cY, -1, ValidGround),
                         FindType(cX + 1, cY, -1, ValidGround)
                         );
+
                     if (ValidGround.Any(v => v == Main.tile[cX + 1, cY].type) && ValidGround.Any(v => v == Main.tile[cX + 2, cY].type) && ScanRectangle(cX, cY - 6, 4, 6) < 3)
                     {
                         StructureHelper.StructureHelper.GenerateStructure(
@@ -685,8 +698,8 @@ namespace StarlightRiver.Core
                         crystalsPlaced++;
                         break;
                     }
-                    else
-                        if (tries++ >= 20) break;
+                    else if (tries++ >= 20)
+                            break;
                 }
             }
             else if (small)
@@ -698,7 +711,7 @@ namespace StarlightRiver.Core
                 // Perform several checks
                 while (spawnAttempts-- > 0)
                 {
-                    cX = x + genRand.Next((int)(wid * -0.60f), (int)(wid * 0.60f)) - 3;
+                    cX = x + genRand.Next((int)(width * -0.60f), (int)(width * 0.60f)) - 3;
                     cY = y - 5;
                     cY = FindType(cX, cY, -1, ValidGround);
                     // If the left side of the crystal isn't valid,

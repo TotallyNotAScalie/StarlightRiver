@@ -60,7 +60,7 @@ namespace StarlightRiver.Content.Tiles
         {
             LootBubble bubble = GetModTile(Parent.type) as LootBubble;
 
-            if (bubble.CanOpen(player) && player.Hitbox.Intersects(new Rectangle(ParentX * 16, ParentY * 16, 16, 16)))
+            if (bubble != null && bubble.CanOpen(player) && player.Hitbox.Intersects(new Rectangle(ParentX * 16, ParentY * 16, 16, 16)))
             {
                 Loot loot = bubble.GoldLootPool[Main.rand.Next(bubble.GoldLootPool.Count)];
                 Item.NewItem(projectile.Center, loot.Type, loot.GetCount());
@@ -75,7 +75,7 @@ namespace StarlightRiver.Content.Tiles
         public override void PostDraw(SpriteBatch spriteBatch, Color lightColor)
         {
             LootBubble bubble = GetModTile(Parent.type) as LootBubble;
-            bubble.DrawBubble(projectile.position - Main.screenPosition, spriteBatch, projectile.ai[0]);
+            bubble?.DrawBubble(projectile.position - Main.screenPosition, spriteBatch, projectile.ai[0]);
         }
 
         public void DrawAdditive(SpriteBatch spriteBatch)
