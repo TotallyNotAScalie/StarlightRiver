@@ -55,6 +55,8 @@ namespace StarlightRiver
 
         public void PopulateChests()
         {
+            return; //TODO: Remove this once this is fixed. This occasinally causes worldgen crashes.
+
             for (int i = 0; i < Main.maxChests; i++)
             {
                 Chest chest = Main.chest[i];

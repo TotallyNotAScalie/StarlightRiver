@@ -278,7 +278,6 @@ namespace StarlightRiver.Content.GUI
                 }
 			}
 
-
             Main.isMouseLeftConsumedByUI = true;
         }
 

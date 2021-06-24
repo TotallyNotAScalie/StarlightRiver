@@ -1,8 +1,12 @@
-﻿using StarlightRiver.Content.Tiles.CrashTech;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StarlightRiver.Codex;
+using StarlightRiver.Content.Tiles.CrashTech;
 using StarlightRiver.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -36,32 +40,47 @@ namespace StarlightRiver.Content.Items
             item.autoReuse = true;
             item.UseSound = SoundID.Item18;
             item.useTurn = true;
+            item.accessory = true;
 
-            item.createTile = ModContent.TileType<CrashPod>();
+            //item.createTile = ModContent.TileType<CrashPod>();
         }
 
-        public override void UpdateInventory(Player player)
-        {
-            float rot = Main.rand.NextFloat(6.28f);
+		public override void UpdateEquip(Player player)
+		{
+            player.GetModPlayer<CritMultiPlayer>().AllCritMult += 1;
+		}
 
-            Dust.NewDustPerfect(player.Center + Microsoft.Xna.Framework.Vector2.UnitX.RotatedBy(rot) * 300, ModContent.DustType<Bosses.GlassBoss.LavaSpew>(), Microsoft.Xna.Framework.Vector2.UnitX.RotatedBy(rot));
+		public override void UpdateInventory(Player player)
+        {
+
         }
 
-        public override bool UseItem(Player player)
+		public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+		{
+            var r = StarlightWorld.VitricBiome;
+            spriteBatch.Draw(Main.magicPixel, new Rectangle((r.X + r.Width / 2 - 59) * 16 - (int)Main.screenPosition.X, (r.Y + 7) * 16 - (int)Main.screenPosition.Y, (108) * 16, (66) * 16), Color.Red * 0.25f);
+		}
+
+		public override bool UseItem(Player player)
         {
-            for(int x = 0; x < Main.maxTilesX; x++)
-                for(int y = 0; y < Main.maxTilesY; y++)
-				{
-                    var tile = Framing.GetTileSafely(x, y);
-                    if (tile.collisionType == 1)
-                        tile.type = TileID.Stone;
-                    else
-					{
-                        tile.active(true);
-                        tile.type = TileID.Dirt;
-                    }
-				}
+            StarlightWorld.VitricGen(new Terraria.World.Generation.GenerationProgress());
             return true;
+        }
+
+        private void TurnTile(int x, int y)
+		{
+            Tile tile = Framing.GetTileSafely(x, y);
+
+            tile.bTileHeader3 |= 0b00100000;
+
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
+                {
+                    Tile tile2 = Framing.GetTileSafely(i + x, j + y);
+
+                    if (tile2.collisionType == 0 && ((tile2.bTileHeader3 & 0b11100000) >> 5) == 0)
+                        TurnTile(i + x, j + y);
+                }
         }
     }
 }

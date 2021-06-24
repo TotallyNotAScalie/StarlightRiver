@@ -8,6 +8,7 @@ using Terraria.Graphics.Effects;
 using StarlightRiver.Core;
 using StarlightRiver.Content.Bosses.SquidBoss;
 using StarlightRiver.Content.NPCs.BaseTypes;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace StarlightRiver.Content.CustomHooks
 {
@@ -54,16 +55,18 @@ namespace StarlightRiver.Content.CustomHooks
                 var effect = Filters.Scene["Waves"].GetShader().Shader;
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(default, default, default, default, default, effect, Main.GameViewMatrix.ZoomMatrix);
+                Main.spriteBatch.Begin(default, default, SamplerState.PointClamp, default, default, effect, Main.GameViewMatrix.ZoomMatrix);
 
                 effect.Parameters["uTime"].SetValue(StarlightWorld.rottime);
                 effect.Parameters["power"].SetValue(0.002f + 0.0005f * (float)Math.Sin(StarlightWorld.rottime));
+                effect.Parameters["offset"].SetValue(new Vector2(Main.screenPosition.X % Main.screenWidth / Main.screenWidth, Main.screenPosition.Y % Main.screenHeight / Main.screenHeight));
+                effect.Parameters["sampleTexture"].SetValue(PermafrostGlobalTile.auroraBackTarget);
                 effect.Parameters["speed"].SetValue(50f);
 
                 Main.spriteBatch.Draw(CathedralTarget.CatherdalWaterTarget, Vector2.Zero - Main.LocalPlayer.velocity, Color.White);
 
                 Main.spriteBatch.End();
-                Main.spriteBatch.Begin(default, default, default, default, default, default, Main.GameViewMatrix.ZoomMatrix);
+                Main.spriteBatch.Begin(default, default, SamplerState.PointClamp, default, default, default, Main.GameViewMatrix.ZoomMatrix);
             }
         }
     }

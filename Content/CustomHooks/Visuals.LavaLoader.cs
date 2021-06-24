@@ -49,7 +49,7 @@ namespace StarlightRiver.Content.Lavas
         private int LavaBody(int arg)
         {
             foreach(var style in lavas)
-                if (style.ChooseLavaStyle) return style.Type;
+                if (style.ChooseLavaStyle()) return style.Type;
 
             return arg;
         }
@@ -59,18 +59,30 @@ namespace StarlightRiver.Content.Lavas
             var c = new ILCursor(il);
             c.TryGotoNext(n => n.MatchLdsfld(typeof(Main), "liquidTexture"));
             c.Index += 3;
-            c.EmitDelegate<Func<Texture2D, Texture2D>>(LavaBlockBody);
+            c.Emit(OpCodes.Ldloc, 16);
+            c.Emit(OpCodes.Ldloc, 15);
+
+            c.Emit(OpCodes.Ldloc, 142);
+            c.Emit(OpCodes.Ldloc, 141);
+            c.Emit(OpCodes.Ldloc, 140);
+            c.Emit(OpCodes.Ldloc, 143);
+
+            c.EmitDelegate<Func<Texture2D, int, int, Tile, Tile, Tile, Tile, Texture2D>>(LavaBlockBody);
         }
 
-        private Texture2D LavaBlockBody(Texture2D arg)
+        private Texture2D LavaBlockBody(Texture2D arg, int x, int y, Tile up, Tile left, Tile right, Tile down)
         {
+            if (arg != GetTexture("Terraria/Liquid_1"))
+                return arg;
+
             foreach (var style in lavas)
-                if (style.ChooseLavaStyle)
+                if (style.ChooseLavaStyle())
                 {
                     string path = "";
                     string garbage = "", garbage2 = "";
                     style.SafeAutoload(ref garbage, ref path, ref garbage2);
-                    return GetTexture(path);
+                    style.DrawBlockEffects(x, y, up, left, right, down);
+                    return GetTexture(path + "_Block");
                 }
 
             return arg;
@@ -97,7 +109,7 @@ namespace StarlightRiver.Content.Lavas
         private bool SwapLava(int x, int y)
         {
             foreach (var style in lavas)
-                if (style.ChooseLavaStyle)
+                if (style.ChooseLavaStyle())
                 {
                     return style.DrawEffects(x, y);
                 }

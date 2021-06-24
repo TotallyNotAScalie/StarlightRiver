@@ -49,10 +49,12 @@ namespace StarlightRiver.Core
 
         public const string OvergrowTile =          Assets + "Tiles/Overgrow/";
         public const string OvergrowItem =          Assets + "Items/Overgrow/";
+        public const string OvergrowNpc =           Assets + "NPCs/Overgrow/";
         public const string OvergrowBoss =          Assets + "Bosses/OvergrowBoss/";
 
         public const string VitricTile =            Assets + "Tiles/Vitric/";
         public const string VitricItem =            Assets + "Items/Vitric/";
+        public const string VitricNpc =             Assets + "NPCs/Vitric/";
         public const string GlassMiniboss =         Assets + "Bosses/GlassMiniboss/";
         public const string GlassBoss =             Assets + "Bosses/GlassBoss/";
 
@@ -67,6 +69,8 @@ namespace StarlightRiver.Core
         public const string IvyItem =               Assets + "Items/ForestIvy/";
         public const string MiscItem =              Assets + "Items/Misc/";
         public const string BreacherItem =          Assets + "Items/Breacher/";
+        public const string PotionsItem =           Assets + "Items/Potions/";
+        public const string ForestItem =            Assets + "Items/Forest/";
 
         public const string CraftingTile =          Assets + "Tiles/Crafting/";
 
@@ -75,6 +79,10 @@ namespace StarlightRiver.Core
         public const string VoidTile =              Assets + "Tiles/Void/";
 
         public const string CookingTile =           Assets + "Tiles/Cooking/";
+
+        public const string TrophyTile =            Assets + "Tiles/Trophies/";
+
+        public const string PaintingTile =          Assets + "Tiles/Paintings/";
 
         public const string AluminumTile =          Assets + "Tiles/AstralMeteor/";
 
@@ -104,5 +112,12 @@ namespace StarlightRiver.Core
         public const string Astroflora =            Assets + "Items/Astroflora/";
 
         public const string ArmorEnchant =          Assets + "ArmorEnchantment/";
+
+        //structures
+        public const string StructureFolder =       "Structures/";
+
+        public const string VitricStructures =      StructureFolder + "Vitric/";
+
+        public const string VitricCrystalStructs =  VitricStructures + "WalkableCrystals/";
     }
 }
